@@ -4,8 +4,8 @@ import axios from 'axios';
 
 import { cleanObject } from 'src/sections/news-list/utils';
 
-// const API_URL = import.meta.env.VITE_API_URL;
-const API_URL = '/api';
+const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = '/api';
 
 export const getCountries = async () => {
   try {
