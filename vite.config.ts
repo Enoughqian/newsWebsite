@@ -38,12 +38,12 @@ export default defineConfig({
     port: PORT, 
     host: true,
     proxy: {
-      // "/api": {
-      //   target: "http://152.32.218.226:9999/news_server/api",
-      //   changeOrigin: true,
-      //   secure: false,
-      //   rewrite: (path) => path.replace(/^\/api/, ""), // 确保路径不重复
-      // },
+      "/api": {
+        target: "http://152.32.218.226:9999/news_server/api",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ""), // 确保路径不重复
+      },
     },
   },
   preview: { port: PORT, host: true },
