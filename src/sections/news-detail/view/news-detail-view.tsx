@@ -7,12 +7,12 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Box, Button, TextField } from '@mui/material';
 
+import { useAuth } from 'src/api/auth';
 import { useToast } from 'src/ToastContext';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { updateNews, getNewsDetail } from 'src/api/NewsService';
 
 import { cleanObject } from 'src/sections/news-list/utils';
-import { useAuth } from 'src/api/auth';
 
 type NewsProps = {
   id?: number,

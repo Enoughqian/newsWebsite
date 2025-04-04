@@ -24,6 +24,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { getRecNewsList, updateNewsList } from 'src/api/NewsService';
 
 import { Scrollbar } from 'src/components/scrollbar';
+
 import { TableNoData } from 'src/sections/news-list/table-no-data';
 
 type FormDataProps = {

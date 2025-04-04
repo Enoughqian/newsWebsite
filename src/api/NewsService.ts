@@ -4,11 +4,8 @@ import axios from 'axios';
 
 import { cleanObject } from 'src/sections/news-list/utils';
 
-const API_URL = 'http://152.32.218.226:9999/news_server/api';
-export const TENCENT_SECRETID = 'AKID381WyEI8nGdvCOSL1TildIk03sVxEJF7';
-export const TENCENT_SECRETKEY = 'xoXFpYG1HNGxUswoUwDKG9sOuFNJ1Ys1';
-export const TENCENT_BUCKET = 'download-word-1258484232';
-export const ENV = 'release';
+// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = '/api';
 
 export const getCountries = async () => {
   try {

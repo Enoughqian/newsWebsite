@@ -1,6 +1,6 @@
 import type { Theme } from '@mui/material/styles';
-import { zhCN } from '@mui/material/locale';
 
+import { zhCN } from '@mui/material/locale';
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
 
 import { shadows, typography, components, colorSchemes, customShadows } from './core';

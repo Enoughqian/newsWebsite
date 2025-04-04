@@ -19,7 +19,11 @@ import {
 
 import { useToast } from 'src/ToastContext';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { generateWord, getPubNewsList, TENCENT_BUCKET, TENCENT_SECRETID, TENCENT_SECRETKEY } from 'src/api/NewsService';
+import { generateWord, getPubNewsList } from 'src/api/NewsService';
+
+const TENCENT_BUCKET = import.meta.env.VITE_TENCENT_BUCKET
+const TENCENT_SECRETID = import.meta.env.VITE_TENCENT_SECRETID
+const TENCENT_SECRETKEY = import.meta.env.VITE_TENCENT_SECRETKEY
 
 type FormDataProps = {
     topic: string[],
@@ -52,6 +56,8 @@ export function UploadCreateView() {
     const [wordtype, setWordtype] = useState('');
     const [piclink, setPiclink] = useState('');
     const [loading, setLoading] = useState(false);
+
+    console.log(TENCENT_BUCKET)
 
     const categories = useMemo(() => filterData.reduce((acc, item) => {
         const key = item.classify;
