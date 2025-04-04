@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { cleanObject } from 'src/sections/news-list/utils';
 
-// const API_URL = 'http://152.32.218.226:9999/news_server/api';
+const API_URL = 'http://152.32.218.226:9999/news_server/api';
 export const TENCENT_SECRETID = 'AKID381WyEI8nGdvCOSL1TildIk03sVxEJF7';
 export const TENCENT_SECRETKEY = 'xoXFpYG1HNGxUswoUwDKG9sOuFNJ1Ys1';
 export const TENCENT_BUCKET = 'download-word-1258484232';
@@ -12,7 +12,7 @@ export const ENV = 'release';
 
 export const getCountries = async () => {
   try {
-    const response = await axios.get('/api/getCountry');
+    const response = await axios.get(`${API_URL}/getCountry`);
     return response.data.data; // 直接返回国家列表数组
   } catch (error) {
     console.error('获取国家列表失败:', error);
@@ -23,7 +23,7 @@ export const getCountries = async () => {
 export const getNewsList = async (body: any) => {
   try {
     const response = await axios.post(
-      '/api/filterList',
+      `${API_URL}/filterList`,
       {
         ...cleanObject(body),
         state: body.state === 'all' ? '' : body.state,
@@ -49,7 +49,7 @@ export const getNewsList = async (body: any) => {
 
 export const getNewsDetail = async (id: string) => {
   try {
-    const response = await axios.get(`/api/getSingleInfo?unique_id=${id}`);
+    const response = await axios.get(`${API_URL}/getSingleInfo?unique_id=${id}`);
     return response.data.info;
   } catch (error) {
     console.error('获取新闻详情失败:', error);
@@ -59,7 +59,7 @@ export const getNewsDetail = async (id: string) => {
 
 export const updateNews = async (body: any) => {
   try {
-    const response = await axios.post('/api/setSingleInfo', body, {
+    const response = await axios.post(`${API_URL}/setSingleInfo`, body, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -73,7 +73,7 @@ export const updateNews = async (body: any) => {
 
 export const login = async (body: any) => {
   try {
-    const response = await axios.post('/api/Login', body, {
+    const response = await axios.post(`${API_URL}/Login`, body, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -88,7 +88,7 @@ export const login = async (body: any) => {
 export const getRecNewsList = async (body: any) => {
   try {
     const response = await axios.post(
-      '/api/filterTask',
+      `${API_URL}/filterTask`,
       {
         ...cleanObject(body),
         state: body.state === 'all' ? '' : body.state,
@@ -114,7 +114,7 @@ export const getRecNewsList = async (body: any) => {
 
 export const updateNewsList = async (body: any) => {
   try {
-    const response = await axios.post('/api/recallTask', body, {
+    const response = await axios.post(`${API_URL}/recallTask`, body, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -129,7 +129,7 @@ export const updateNewsList = async (body: any) => {
 export const getPubNewsList = async (body: any) => {
   try {
     const response = await axios.post(
-      '/api/filterUpload',
+      `${API_URL}/filterUpload`,
       {
         ...cleanObject(body),
       },
@@ -152,7 +152,7 @@ export const getPubNewsList = async (body: any) => {
 
 export const generateWord = async (body: any) => {
   try {
-    const response = await axios.post('/api/genWordFile', body, {
+    const response = await axios.post(`${API_URL}/genWordFile`, body, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -166,7 +166,7 @@ export const generateWord = async (body: any) => {
 
 export const getNewsNumber = async () => {
   try {
-    const response = await axios.get('/api/getCountData?ctype=2');
+    const response = await axios.get(`${API_URL}/getCountData?ctype=2`);
     return response.data;
   } catch (error) {
     console.error('获取今日传入正式库的数量失败:', error);
@@ -176,7 +176,7 @@ export const getNewsNumber = async () => {
 
 export const getNewsStatic = async () => {
   try {
-    const response = await axios.get('/api/getCountData?ctype=1');
+    const response = await axios.get(`${API_URL}/getCountData?ctype=1`);
     return response.data;
   } catch (error) {
     console.error('获取新闻统计数据失败:', error);
