@@ -57,8 +57,6 @@ export function UploadCreateView() {
     const [piclink, setPiclink] = useState('');
     const [loading, setLoading] = useState(false);
 
-    console.log(TENCENT_BUCKET)
-
     const categories = useMemo(() => filterData.reduce((acc, item) => {
         const key = item.classify;
         if (!acc[key]) {
@@ -106,9 +104,7 @@ export function UploadCreateView() {
 
     const moveToLeft = (item: NewsProps) => {
         // 找到该项属于哪个分类
-        const category = Object.keys(filterData).find((key) =>
-            categories[key].includes(item)
-        );
+        const category = Object.keys(categories).find((key) => categories[key].includes(item));
 
         if (!category) return; // 万一找不到，直接返回
 
@@ -160,37 +156,37 @@ export function UploadCreateView() {
     });
 
     const handleWordSubmit = useCallback(async () => {
-        if(!selectedItems.length) {
+        if (!selectedItems.length) {
             showToast("请选择模版新闻", 'error')
             return
         }
-        if(!wordtype) {
+        if (!wordtype) {
             showToast("请选择模版", 'error')
             return
         }
-        if(wordtype === 'inner' && !piclink) {
+        if (wordtype === 'inner' && !piclink) {
             showToast("请上传图片", 'error')
             return
         }
 
-        const body: {idlist:string[],wordtype:string, piclink?:string} = {
+        const body: { idlist: string[], wordtype: string, piclink?: string } = {
             idlist: selectedItems.map(item => item.id.toString()),
             wordtype
         }
-        if( wordtype === 'inner') {
+        if (wordtype === 'inner') {
             body.piclink = piclink
         }
         setLoading(true)
         const response = await generateWord(body)
-        if(response.err_code === 2) {
+        if (response.err_code === 2) {
             showToast(response.msg, 'error')
-        } else if(response?.link) {
+        } else if (response?.link) {
             showToast(response.msg, 'success')
             window.open(response.link)
         }
         setLoading(false)
 
-    },[piclink, selectedItems, showToast, wordtype])
+    }, [piclink, selectedItems, showToast, wordtype])
 
     useEffect(() => {
         setAvailableItems({ ...categories })
@@ -221,10 +217,10 @@ export function UploadCreateView() {
                                 }}
                                 renderTags={(value: any[], getTagProps: (arg0: { index: any; }) => any) =>
                                     value.map((option, index) => (
-                                        <Chip 
+                                        <Chip
                                             key={index}  // 将 key 直接传递给 Chip
-                                            label={option.label} 
-                                            {...getTagProps({ index })} 
+                                            label={option.label}
+                                            {...getTagProps({ index })}
                                         />
                                     ))
                                 }
@@ -380,7 +376,7 @@ export function UploadCreateView() {
                         <img src={piclink} alt="预览图片" width={200} style={{ borderRadius: 8, border: "1px solid #ccc" }} />
                     </Box>
                 )}
-                <LoadingButton loading={loading}  variant="contained" size="large" sx={{ m:2, width: 200 }} onClick={() => handleWordSubmit()}>
+                <LoadingButton loading={loading} variant="contained" size="large" sx={{ m: 2, width: 200 }} onClick={() => handleWordSubmit()}>
                     生成word
                 </LoadingButton>
             </Card>
