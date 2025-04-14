@@ -22,15 +22,21 @@ const getTodayDate = () => {
   return `${year}-${month}-${day}`;
 };
 
-type StaticProps = { 
-  spider_news_num: number, 
-  cost: number, 
-  spider_platform_num: number, 
-  datestr: string 
+type StaticProps = {
+  spider_news_num: number,
+  cost: number,
+  spider_platform_num: number,
+  datestr: string
 }
 
 export function OverviewAnalyticsView() {
   const [data, setData] = useState<StaticProps[]>([])
+  const [sum, SetSum] = useState<StaticProps>({
+    spider_platform_num: 23,
+    spider_news_num: 2141,
+    cost: 0,
+    datestr: ''
+  })
 
   const todayData = useMemo(() => {
     const today = getTodayDate()
@@ -40,7 +46,8 @@ export function OverviewAnalyticsView() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getNewsStatic()
-      setData(response?.data)
+      setData(response?.date_info)
+      SetSum(response?.sum_info)
     }
     fetchData()
   }, [])
@@ -74,6 +81,23 @@ export function OverviewAnalyticsView() {
             total={todayData?.spider_platform_num ?? 0}
             color="warning"
             icon={<IoAppsSharp fontSize='large' />}
+          />
+        </Grid>
+
+        <Grid xs={4} sm={4} md={4}>
+          <AnalyticsWidgetSummary
+            title="总新闻数量"
+            total={sum?.spider_news_num ?? 0}
+            icon={<MdArticle fontSize='large' />}
+          />
+        </Grid>
+
+        <Grid xs={4} sm={4} md={4}>
+          <AnalyticsWidgetSummary
+            title="总费用"
+            total={sum?.cost ?? 0}
+            color="secondary"
+            icon={<MdCurrencyYen fontSize='large' />}
           />
         </Grid>
 

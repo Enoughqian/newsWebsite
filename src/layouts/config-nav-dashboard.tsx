@@ -21,7 +21,7 @@ export const navData = [
     icon: <MdOutlineSubtitles size={24}/>,
   },
   {
-    title: '上传生成页',
+    title: '上传生成',
     path: '/upload-create',
     icon: <FaCloudUploadAlt size={24}/>,
   },

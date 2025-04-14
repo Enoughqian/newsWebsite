@@ -24,9 +24,9 @@ import { getNewsList, getCountries } from 'src/api/NewsService';
 
 import { Scrollbar } from 'src/components/scrollbar';
 
-import { emptyRows } from '../utils';
 import { NewsTableRow } from '../table-row';
 import { NewsTableHead } from '../table-head';
+import { getToday, emptyRows } from '../utils';
 import { TableNoData } from '../table-no-data';
 import { TableEmptyRows } from '../table-empty-rows';
 
@@ -37,8 +37,10 @@ type FormDataProps = {
   state: string,
   country: string[],
   topic: string[],
-  publishdate: string,
-  refreshdate: string,
+  publishstartdate: string,
+  publishenddate: string,
+  refreshstartdate: string,
+  refreshenddate: string,
   title_keyword: string,
   title_translate_keyword: string,
   content_keyword: string,
@@ -47,11 +49,13 @@ type FormDataProps = {
 }
 
 const initFormData = {
-  state: '',
+  state: '已生成未处理',
   country: [],
   topic: [],
-  publishdate: '',
-  refreshdate: '',
+  publishstartdate: '',
+  publishenddate: '',
+  refreshstartdate: '',
+  refreshenddate: '',
   title_keyword: '',
   title_translate_keyword: '',
   content_keyword: '',
@@ -73,6 +77,7 @@ export function NewsListView() {
     { value: '已生成未处理', label: '已生成未处理' },
     { value: '已抓取未生成', label: '已抓取未生成' },
     { value: '运营已处理', label: '运营已处理' },    
+    { value: '已推送正式库', label: '已推送正式库' },    
   ]
 
   const selectSubjectOptions = [
@@ -117,7 +122,7 @@ export function NewsListView() {
         value: country
       })));
 
-      const {data, total} = await getNewsList({...initFormData, num: 5 });
+      const {data, total} = await getNewsList({...initFormData, num: 10 });
       setTableData([...data])
       setTableTotal(total)
     };
@@ -217,22 +222,46 @@ export function NewsListView() {
             {/* 时间选择项 */}
             <Box sx={{ display: 'flex', gap: 2 }}>
               <TextField
-                label="选择发布时间"
+                label="发布时间开始"
                 type="date"
-                name="publishdate"
-                value={formData.publishdate}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, publishdate: e.target.value })}
+                name="publishstartdate"
+                value={formData.publishstartdate}
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, publishstartdate: e.target.value })}
                 InputLabelProps={{ shrink: true }}
                 margin="normal"
                 fullWidth
               />
 
               <TextField
-                label="选择更新时间"
+                label="发布时间结束"
                 type="date"
-                name="refreshdate"
-                value={formData.refreshdate}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, refreshdate: e.target.value })}
+                name="publishenddate"
+                value={formData.publishenddate}
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, publishenddate: e.target.value })}
+                InputLabelProps={{ shrink: true }}
+                margin="normal"
+                fullWidth
+              />
+            </Box>
+
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                label="更新时间开始"
+                type="date"
+                name="refreshstartdate"
+                value={formData.refreshstartdate}
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, refreshstartdate: e.target.value })}
+                InputLabelProps={{ shrink: true }}
+                margin="normal"
+                fullWidth
+              />
+
+              <TextField
+                label="更新时间结束"
+                type="date"
+                name="refreshenddate"
+                value={formData.refreshenddate}
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, refreshenddate: e.target.value })}
                 InputLabelProps={{ shrink: true }}
                 margin="normal"
                 fullWidth
@@ -294,7 +323,7 @@ export function NewsListView() {
           count={tableTotal}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25]}
           onRowsPerPageChange={table.onChangeRowsPerPage}
         />
       </Card>
@@ -306,7 +335,7 @@ export function NewsListView() {
 
 export function useTable() {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const onResetPage = useCallback(() => {
     setPage(0);

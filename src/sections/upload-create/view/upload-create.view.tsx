@@ -21,13 +21,16 @@ import { useToast } from 'src/ToastContext';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { generateWord, getPubNewsList } from 'src/api/NewsService';
 
+import { getToday } from "src/sections/news-list/utils";
+
 const TENCENT_BUCKET = import.meta.env.VITE_TENCENT_BUCKET
 const TENCENT_SECRETID = import.meta.env.VITE_TENCENT_SECRETID
 const TENCENT_SECRETKEY = import.meta.env.VITE_TENCENT_SECRETKEY
 
 type FormDataProps = {
     topic: string[],
-    refreshdate: string,
+    refreshstartdate: string,
+    refreshenddate: string,
     title_translate_keyword: string,
     contain_keyword: string,
 }
@@ -36,7 +39,8 @@ type NewsProps = { id: number, classify: string, title: string }
 
 const initFormData = {
     topic: [],
-    refreshdate: '',
+    refreshstartdate: '',
+    refreshenddate: '',
     title_translate_keyword: '',
     contain_keyword: '',
 }
@@ -45,6 +49,8 @@ const cos = new COS({
     SecretId: TENCENT_SECRETID,
     SecretKey: TENCENT_SECRETKEY
 });
+
+const order = ['政治', '军事', '社会', '经济'];
 
 export function UploadCreateView() {
     // 表单状态
@@ -57,14 +63,22 @@ export function UploadCreateView() {
     const [piclink, setPiclink] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const categories = useMemo(() => filterData.reduce((acc, item) => {
-        const key = item.classify;
-        if (!acc[key]) {
-            acc[key] = [];
-        }
-        acc[key].push(item);
-        return acc;
-    }, {}), [filterData])
+    const categories = useMemo(() => {
+        const obj = filterData.reduce((acc, item) => {
+            const key = item.classify;
+            if (!acc[key]) {
+                acc[key] = [];
+            }
+            acc[key].push(item);
+            return acc;
+        }, {})
+        return order.reduce((acc: {[key:string]:any}, key) => {
+            if (obj[key]) {
+                acc[key] = obj[key];  // 按照指定顺序添加每个分类的数据
+            }
+            return acc;
+        }, {});
+    }, [filterData])
 
     const selectSubjectOptions = [
         { value: '社会', label: '社会' },
@@ -196,7 +210,7 @@ export function UploadCreateView() {
         <DashboardContent>
             <Box display="flex" alignItems="center" mb={2}>
                 <Typography variant="h4" flexGrow={1}>
-                    上传生成页
+                    上传生成
                 </Typography>
             </Box>
 
@@ -231,11 +245,20 @@ export function UploadCreateView() {
                             />
                             {/* 时间选择项 */}
                             <TextField
-                                label="选择发布时间"
+                                label="发布时间开始"
                                 type="date"
-                                name="refreshdate"
-                                value={formData.refreshdate}
-                                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, refreshdate: e.target.value })}
+                                name="refreshstartdate"
+                                value={formData.refreshstartdate}
+                                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, refreshstartdate: e.target.value })}
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
+                            />
+                            <TextField
+                                label="发布时间结束"
+                                type="date"
+                                name="refreshenddate"
+                                value={formData.refreshenddate}
+                                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, refreshenddate: e.target.value })}
                                 InputLabelProps={{ shrink: true }}
                                 fullWidth
                             />
