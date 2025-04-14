@@ -30,7 +30,8 @@ import { TableNoData } from 'src/sections/news-list/table-no-data';
 type FormDataProps = {
     state: string,
     topic: string[],
-    refreshdate: string,
+    refreshstartdate: string,
+    refreshenddate: string,
     chinakeyword: string,
     keyword: string,
 }
@@ -38,7 +39,8 @@ type FormDataProps = {
 const initFormData = {
     state: '',
     topic: [],
-    refreshdate: '',
+    refreshstartdate: '',
+    refreshenddate: '',
     chinakeyword: '',
     keyword: '',
 }
@@ -50,7 +52,7 @@ export function RecTitleView() {
     const [tableData, setTableData] = useState<any[]>([])
     const [tableTotal, setTableTotal] = useState(0)
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const { showToast } = useToast();
 
     const selectStatusOptions = [
@@ -222,18 +224,29 @@ export function RecTitleView() {
                             <TextField label="英文标题关键词(输入关键词)" name="keyword" value={formData.keyword} onChange={handleChange} margin="normal" fullWidth />
                         </Box>
 
-                        {/* 时间选择项 */}
-                        <TextField
-                            label="选择更新时间"
-                            type="date"
-                            name="refreshdate"
-                            value={formData.refreshdate}
-                            onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, refreshdate: e.target.value })}
-                            InputLabelProps={{ shrink: true }}
-                            margin="normal"
-                            sx={{ width: 400 }}
-                        />
-
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            {/* 时间选择项 */}
+                            <TextField
+                                label="更新时间开始"
+                                type="date"
+                                name="refreshstartdate"
+                                value={formData.refreshstartdate}
+                                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, refreshstartdate: e.target.value })}
+                                InputLabelProps={{ shrink: true }}
+                                margin="normal"
+                                sx={{ width: 400 }}
+                            />
+                            <TextField
+                                label="更新时间结束"
+                                type="date"
+                                name="refreshenddate"
+                                value={formData.refreshenddate}
+                                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, refreshenddate: e.target.value })}
+                                InputLabelProps={{ shrink: true }}
+                                margin="normal"
+                                sx={{ width: 400 }}
+                            />
+                        </Box>
                         {/* 提交按钮 */}
                         <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-start' }}>
                             <Button type="submit" variant="contained" size="large" sx={{ px: 5 }}>
@@ -309,7 +322,7 @@ export function RecTitleView() {
                 </Scrollbar>
                 {/* 分页控件 */}
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 15]}
+                    rowsPerPageOptions={[10, 25]}
                     component="div"
                     count={tableTotal ?? 0}
                     rowsPerPage={rowsPerPage}

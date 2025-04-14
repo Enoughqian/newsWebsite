@@ -5,7 +5,14 @@ import { useParams } from 'react-router-dom';
 
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
-import { Box, Button, TextField } from '@mui/material';
+import {
+  Box, Button,
+  Select,
+  MenuItem,
+  TextField,
+  InputLabel,
+  FormControl
+} from '@mui/material';
 
 import { useAuth } from 'src/api/auth';
 import { useToast } from 'src/ToastContext';
@@ -22,6 +29,8 @@ type NewsProps = {
   translate?: string,
   main_classify?: string,
   keyword?: string,
+  link?: string,
+  pic_set?: string
 }
 
 export function NewsDetailView() {
@@ -36,7 +45,16 @@ export function NewsDetailView() {
     translate: '',
     main_classify: '',
     keyword: '',
+    link: '',
+    pic_set: ''
   })
+
+  const selectSubjectOptions = [
+    { value: '社会', label: '社会' },
+    { value: '政治', label: '政治' },
+    { value: '军事', label: '军事' },
+    { value: '经济', label: '经济' },
+  ]
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -46,15 +64,27 @@ export function NewsDetailView() {
     }));
   };
 
+  const movePic = async () => {
+    const data = {
+      pic_set: ''
+    }
+    const response = await updateNews({ id, data })
+    if (response.err_code === 0) {
+      showToast('删除成功！', 'success')
+    } else {
+      showToast(response.msg, 'error')
+    }
+  }
+
   const handleClick = async (name: string) => {
     const data = name === 'all' ?
-      { ...cleanObject(newsDetail) } :
+      { ...cleanObject(newsDetail), ctype: 2 } :
       {
         [name]: newsDetail?.[name as keyof NewsProps]
       }
     const response = await updateNews({ id, data })
     if (response.err_code === 0) {
-      showToast('修改成功！', 'success')
+      showToast(name === 'all' ? '提交成功！' : '修改成功！', 'success')
     } else {
       showToast(response.msg, 'error')
     }
@@ -73,7 +103,6 @@ export function NewsDetailView() {
     }
 
   }, [id])
-  // abstract translate keyword title_translate content main_classify
 
   return (
     <DashboardContent>
@@ -86,6 +115,9 @@ export function NewsDetailView() {
         <Box sx={{ p: 2 }}>
           <Typography variant="h5" component="h1" gutterBottom align="left">
             新闻详情编辑
+          </Typography>
+          <Typography variant="h6" component="h6" gutterBottom align="left">
+            原文链接：<a href={newsDetail?.link} target='_blank' rel="noreferrer">{newsDetail?.link}</a>
           </Typography>
           <Box sx={{ display: 'flex', gap: 2 }}>
             <TextField
@@ -110,23 +142,29 @@ export function NewsDetailView() {
               提交关键词
             </Button>
           </Box>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <TextField
-              name='main_classify'
-              label="主题"
-              variant="outlined"
-              value={newsDetail?.main_classify}
-              onChange={handleChange}
-              margin="normal"
-              fullWidth
-            />
+          <Box sx={{ display: 'flex', gap: 2, my: 2 }}>
+            <FormControl fullWidth>
+              <InputLabel id="main_classify-label">主题</InputLabel>
+              <Select
+                labelId="main_classify-label"
+                name="main_classify"
+                value={newsDetail?.main_classify}
+                label="主题"
+                onChange={handleChange}
+              >
+                {selectSubjectOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Button
               variant="contained"
               onClick={() => handleClick('main_classify')}
               size="small"
               sx={{
                 height: '56px',
-                mt: '16px',
                 width: 150
               }}
             >
@@ -233,6 +271,31 @@ export function NewsDetailView() {
               提交正文翻译
             </Button>
           </Box>
+          <Box>
+            {
+              newsDetail?.pic_set && <Button
+                variant="contained"
+                onClick={() => movePic()}
+                size="small"
+                sx={{
+                  height: '56px',
+                  width: 150,
+                  my: 2
+                }}
+              >
+                删除图片
+              </Button>
+            }
+            {
+              newsDetail?.pic_set && <img src={newsDetail?.pic_set} alt="预览图片" width={200} style={{ borderRadius: 8, border: "1px solid #ccc", display: 'block' }} />
+            }
+            {
+              !newsDetail?.pic_set && <Typography variant="body1" component="h1" gutterBottom align="left">
+                暂无图片
+              </Typography>
+            }
+          </Box>
+
           {
             user.role === 'ADMIN' && <Button
               variant="contained"
