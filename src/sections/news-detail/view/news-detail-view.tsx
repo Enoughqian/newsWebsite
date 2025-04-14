@@ -84,7 +84,14 @@ export function NewsDetailView() {
       }
     const response = await updateNews({ id, data })
     if (response.err_code === 0) {
-      showToast(name === 'all' ? '提交成功！' : '修改成功！', 'success')
+      if(name === 'all') {
+        showToast('提交成功！', 'success')
+        if (response?.share_link) {
+          window.open(response?.share_link)
+        }
+      } else {
+        showToast('修改成功！', 'success')
+      }
     } else {
       showToast(response.msg, 'error')
     }
