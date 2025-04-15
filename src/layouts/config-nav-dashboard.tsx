@@ -11,14 +11,14 @@ export const navData = [
     icon: <FaChartLine size={24}/>,
   },
   {
-    title: '新闻列表',
-    path: '/news-list',
-    icon: <FaList size={24}/>,
-  },
-  {
     title: '标题识别',
     path: '/rec-title',
     icon: <MdOutlineSubtitles size={24}/>,
+  },
+  {
+    title: '新闻列表',
+    path: '/news-list',
+    icon: <FaList size={24}/>,
   },
   {
     title: '上传生成',
