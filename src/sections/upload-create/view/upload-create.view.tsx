@@ -21,7 +21,6 @@ import { useToast } from 'src/ToastContext';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { generateWord, getPubNewsList } from 'src/api/NewsService';
 
-import { getToday } from "src/sections/news-list/utils";
 
 const TENCENT_BUCKET = import.meta.env.VITE_TENCENT_BUCKET
 const TENCENT_SECRETID = import.meta.env.VITE_TENCENT_SECRETID
@@ -178,17 +177,15 @@ export function UploadCreateView() {
             showToast("请选择模版", 'error')
             return
         }
-        if (wordtype === 'inner' && !piclink) {
+        if (!piclink) {
             showToast("请上传图片", 'error')
             return
         }
 
         const body: { idlist: string[], wordtype: string, piclink?: string } = {
             idlist: selectedItems.map(item => item.id.toString()),
-            wordtype
-        }
-        if (wordtype === 'inner') {
-            body.piclink = piclink
+            wordtype,
+            piclink
         }
         setLoading(true)
         const response = await generateWord(body)
