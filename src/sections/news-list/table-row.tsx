@@ -1,12 +1,12 @@
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { FaRegEdit } from "react-icons/fa";
 
+import { Typography } from "@mui/material";
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { Button, Typography } from "@mui/material";
-import { updateNews } from "src/api/NewsService";
+
 import { useToast } from "src/ToastContext";
+import { updateNews } from "src/api/NewsService";
 
 // ----------------------------------------------------------------------
 

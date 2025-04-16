@@ -14,3 +14,12 @@ export function getToday() {
   const formattedDate = date.toISOString().split('T')[0];
   return formattedDate;
 }
+
+export function getLastToday() {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  
+  // 格式化为 YYYY-MM-DD
+  const formattedDate = yesterday.toISOString().split('T')[0];
+  return formattedDate;
+}

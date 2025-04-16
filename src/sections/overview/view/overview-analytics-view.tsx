@@ -9,18 +9,12 @@ import Typography from '@mui/material/Typography';
 import { getNewsStatic } from "src/api/NewsService";
 import { DashboardContent } from 'src/layouts/dashboard';
 
+import { getToday } from "src/sections/news-list/utils";
+
 import { AnalyticsWebsiteVisits } from '../analytics-website-visits';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 
 // ----------------------------------------------------------------------
-
-const getTodayDate = () => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, '0');  // 月份是从 0 开始的，+1 后补充 0
-  const day = today.getDate().toString().padStart(2, '0');  // 补充日期前的 0
-  return `${year}-${month}-${day}`;
-};
 
 type StaticProps = {
   spider_news_num: number,
@@ -39,7 +33,7 @@ export function OverviewAnalyticsView() {
   })
 
   const todayData = useMemo(() => {
-    const today = getTodayDate()
+    const today = getToday()
     return data.find((item: any) => item.datestr === today)
   }, [data])
 

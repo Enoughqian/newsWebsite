@@ -1,4 +1,4 @@
-import { useMemo , useState, useContext, useCallback, createContext } from 'react';
+import { useMemo, useState, useContext, useCallback, createContext } from 'react';
 
 import { Alert, Snackbar } from '@mui/material';
 
@@ -15,7 +15,7 @@ interface ToastProviderProps {
 }
 
 // ToastProvider 提供给整个应用的 Context
-export function ToastProvider({ children }:ToastProviderProps){
+export function ToastProvider({ children }: ToastProviderProps) {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [severity, setSeverity] = useState<'success' | 'error'>('success');
@@ -42,7 +42,16 @@ export function ToastProvider({ children }:ToastProviderProps){
         open={open}
         autoHideDuration={2000}
         onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        // 关键设置：水平居中 + 垂直居中
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        // 通过 margin 调整垂直位置（视需求调整数值）
+        sx={{
+          top: '50% !important',
+          transform: 'translateY(-50%) !important'
+        }}
       >
         <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
           {message}
