@@ -206,7 +206,7 @@ export function NewsDetailView() {
               name='abstract'
               label="摘要"
               multiline
-              rows={4}
+              rows={6}
               variant="outlined"
               value={newsDetail?.abstract}
               onChange={handleChange}
@@ -232,7 +232,7 @@ export function NewsDetailView() {
               name='content'
               label="原文"
               multiline
-              rows={6}
+              rows={10}
               variant="outlined"
               value={newsDetail?.content}
               onChange={handleChange}
@@ -258,7 +258,7 @@ export function NewsDetailView() {
               name='translate'
               label="正文翻译"
               multiline
-              rows={6}
+              rows={10}
               variant="outlined"
               value={newsDetail?.translate}
               onChange={handleChange}

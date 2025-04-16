@@ -21,6 +21,8 @@ import { useToast } from 'src/ToastContext';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { generateWord, getPubNewsList } from 'src/api/NewsService';
 
+import { getToday, getLastToday } from "src/sections/news-list/utils";
+
 
 const TENCENT_BUCKET = import.meta.env.VITE_TENCENT_BUCKET
 const TENCENT_SECRETID = import.meta.env.VITE_TENCENT_SECRETID
@@ -38,8 +40,8 @@ type NewsProps = { id: number, classify: string, title: string }
 
 const initFormData = {
     topic: [],
-    refreshstartdate: '',
-    refreshenddate: '',
+    refreshstartdate: getLastToday(),
+    refreshenddate: getToday(),
     title_translate_keyword: '',
     contain_keyword: '',
 }
@@ -71,7 +73,7 @@ export function UploadCreateView() {
             acc[key].push(item);
             return acc;
         }, {})
-        return order.reduce((acc: {[key:string]:any}, key) => {
+        return order.reduce((acc: { [key: string]: any }, key) => {
             if (obj[key]) {
                 acc[key] = obj[key];  // 按照指定顺序添加每个分类的数据
             }
@@ -115,7 +117,7 @@ export function UploadCreateView() {
         setSelectedItems((prev) => [...prev, item]);
     };
 
-    const moveToLeft = (item: NewsProps) => {
+    const moveToLeft = useCallback((item: NewsProps) => {
         // 找到该项属于哪个分类
         const category = Object.keys(categories).find((key) => categories[key].includes(item));
 
@@ -127,7 +129,15 @@ export function UploadCreateView() {
         }));
 
         setSelectedItems((prev) => prev.filter((i: NewsProps) => i.id !== item.id)); // 从右侧移除
-    };
+    }, [categories]);
+
+    const moveAll = useCallback(() => {
+        if (selectedItems.length) {
+            setAvailableItems({ ...categories })
+            setSelectedItems([])
+        }
+
+    }, [categories, selectedItems])
 
     const onDragEnd = (result: any) => {
         if (!result.destination) return;
@@ -242,7 +252,7 @@ export function UploadCreateView() {
                             />
                             {/* 时间选择项 */}
                             <TextField
-                                label="发布时间开始"
+                                label="更新时间开始"
                                 type="date"
                                 name="refreshstartdate"
                                 value={formData.refreshstartdate}
@@ -251,7 +261,7 @@ export function UploadCreateView() {
                                 fullWidth
                             />
                             <TextField
-                                label="发布时间结束"
+                                label="更新时间结束"
                                 type="date"
                                 name="refreshenddate"
                                 value={formData.refreshenddate}
@@ -302,9 +312,15 @@ export function UploadCreateView() {
 
                     {/* 右侧可拖拽排序列表 */}
                     <Box sx={{ padding: 2, width: '100%', border: "1px solid #ccc", backgroundColor: "transparent" }}>
-                        <Typography variant="h6" flexGrow={1}>
-                            模版顺序
-                        </Typography>
+
+                        <Box sx={{ display: "flex" }}>
+                            <Typography variant="h6" flexGrow={1}>
+                                模版顺序
+                            </Typography>
+                            <Button size="small" onClick={() => moveAll()}>
+                                全部移除
+                            </Button>
+                        </Box>
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable droppableId="selectedItems">
                                 {(provided: any) => (

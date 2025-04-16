@@ -26,9 +26,9 @@ import { Scrollbar } from 'src/components/scrollbar';
 
 import { NewsTableRow } from '../table-row';
 import { NewsTableHead } from '../table-head';
-import { getToday, emptyRows } from '../utils';
 import { TableNoData } from '../table-no-data';
 import { TableEmptyRows } from '../table-empty-rows';
+import { getToday, emptyRows, getLastToday } from '../utils';
 
 
 // ----------------------------------------------------------------------
@@ -54,8 +54,8 @@ const initFormData = {
   topic: [],
   publishstartdate: '',
   publishenddate: '',
-  refreshstartdate: '',
-  refreshenddate: '',
+  refreshstartdate: getLastToday(),
+  refreshenddate: getToday(),
   title_keyword: '',
   title_translate_keyword: '',
   content_keyword: '',

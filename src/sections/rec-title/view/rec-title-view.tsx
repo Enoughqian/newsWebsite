@@ -26,6 +26,7 @@ import { getRecNewsList, updateNewsList } from 'src/api/NewsService';
 import { Scrollbar } from 'src/components/scrollbar';
 
 import { TableNoData } from 'src/sections/news-list/table-no-data';
+import { getToday, getLastToday } from 'src/sections/news-list/utils';
 
 type FormDataProps = {
     state: string,
@@ -37,10 +38,10 @@ type FormDataProps = {
 }
 
 const initFormData = {
-    state: '',
+    state: '无效',
     topic: [],
-    refreshstartdate: '',
-    refreshenddate: '',
+    refreshstartdate: getLastToday(),
+    refreshenddate: getToday(),
     chinakeyword: '',
     keyword: '',
 }
